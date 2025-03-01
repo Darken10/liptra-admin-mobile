@@ -1,17 +1,31 @@
-import {Pressable, View, StyleSheet, Image, Text, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
-import React, {useEffect} from "react";
-import {useRouter} from "expo-router";
+import {
+    Pressable,
+    View,
+    StyleSheet,
+    Image,
+    Text,
+    SafeAreaView,
+    TouchableOpacity,
+    FlatList,
+    StatusBar
+} from "react-native";
+import React from "react";
+import {router, useRouter} from "expo-router";
 import {MaterialIcons} from "@expo/vector-icons";
+import PageHeader from "@/src/components/my-components/Header";
+import Logo from "@/src/components/my-components/Logo";
+import DropdownMenu from "@/src/components/my-components/DropdownMenu";
 
 
 export default function Index() {
 
     const  router = useRouter()
+    const statusBarHeight = StatusBar.currentHeight
 
     const links : MiniCardBtnPropsType[] = [
         {
             title  : "Scanner",
-            image  : "",
+            image  : "qr-code-scanner",
             handleClique  : ()=>{
                 router.push("/scanner");
                 console.log("Scanner");
@@ -19,57 +33,86 @@ export default function Index() {
         },
         {
             title  : "Valider par code",
-            image  : "",
+            image  : "keyboard",
             handleClique  : ()=>{
                 router.push("/scanner/validerParCode");
                 console.log("Valider par code");
             }
         },
+
+        {
+            title  : "Voyages",
+            image  : "directions-bus",
+            handleClique  : ()=>{
+                router.push("/(modals)/voyages")
+                console.log("Id");
+            }
+        },
+        {
+            title  : "Notification",
+            image  : "notifications",
+            handleClique  : ()=>{
+                console.log("About");
+            }
+        },
+        {
+            title  : "Historique",
+            image  : "history",
+            handleClique  : ()=>{
+                console.log("About");
+            }
+        },
+        {
+            title  : "Partager",
+            image  : "share",
+            handleClique  : ()=>{
+                console.log("About");
+            }
+        },
         {
             title  : "About",
-            image  : "",
+            image  : "help",
             handleClique  : ()=>{
                 console.log("About");
             }
         },
     ]
 
+
   return (
-      <View style={{flex : 1}}>
+      <SafeAreaView style={{flex : 1,marginTop : statusBarHeight ?? 50}}>
+            <Header />
           <TouchableOpacity onPress={()=>{router.push('/scanner/scanner')}} style={styles.flotingBtn}>
               <MaterialIcons name={"qr-code-scanner"} size={24} color={"#FFF"}></MaterialIcons>
           </TouchableOpacity>
           <View style={styles.container}>
 
-              <View style={styles.header}>
-                  <View style={styles.headerContent}>
-                      <Image
-                          style={styles.avatar}
-                          source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar1.png' }}
-                      />
-
-                      <Text style={styles.name}>John Doe</Text>
+              <View style={{display : "flex",flexDirection : "row",justifyContent : "center"}}>
+                  <View style={styles.logoViewStyle}>
+                      <Logo />
                   </View>
               </View>
 
               <View style={styles.body}>
                   <View style={styles.bodyContent}>
 
-                      {
-                          links.map((item, index) => (
+                      <FlatList
+                          data={links} keyExtractor={item => item.title}
+                          numColumns={3}
+                          renderItem={({item,index}) => (
                               <MiniCardBtn
                                   key={index}
                                   title={item.title}
                                   image={item.image}
                                   handleClique={item.handleClique}
                               />
-                          ))
-                      }
+                          )}
+                      ></FlatList>
 
                   </View>
               </View>
           </View>
-      </View>
+      </SafeAreaView>
 
   );
 }
@@ -77,24 +120,53 @@ export default function Index() {
 
 type MiniCardBtnPropsType = {
     title: string,
-    image : string,
+    image : any,
     handleClique: ()=>void,
 }
 
 function MiniCardBtn({title,image,handleClique}:MiniCardBtnPropsType) {
     return (
-        <Pressable  onPress={handleClique}>
-            <View style={styles.menuBox}>
-                <Image
-                    style={styles.icon}
-                    source={{ uri: image }}
-                />
+        <Pressable style={{flex: 1/3}}  onPress={handleClique}>
+            <View style={{overflow : 'hidden'}}>
+                <View style={styles.menuBox}>
+                    <MaterialIcons name={image} style={styles.icon}  size={60} color={"#000"}/>
+                </View>
                 <Text style={styles.info}>{title}</Text>
             </View>
-
         </Pressable>
     );
 }
+
+function Header() {
+    const menuItems = [{
+            title : "Profile",
+            onPress: () => {console.log("menuItems clicked profile");}
+        },{
+            title : "Parametre",
+            onPress: () => {}
+        },
+
+    ]
+    return (
+        <PageHeader
+            /*leftNode={router.canGoBack() ? <MaterialIcons name="arrow-back" size={26}  color={"#e3e3e3"}/> : null}*/
+            headerText="Liptra"
+            rightContainerStyle={styles.rightContainer}
+            handleOnPressLeftNode={router.back}
+            rightNode={
+                <View style={{display : "flex", flexDirection : 'row',alignItems : 'center',justifyContent : "center"}}>
+                    <Image
+                        style={styles.profilePhoto}
+                        source={require("@/assets/images/user.png")}
+                    />
+                    <DropdownMenu options={menuItems} />
+                </View>
+            }
+        />
+    )
+}
+
+
 
 
 const styles = StyleSheet.create({
@@ -106,7 +178,8 @@ const styles = StyleSheet.create({
         marginHorizontal : 1,
         gap : 16,
         alignItems : "center",
-        justifyContent : 'center'
+        justifyContent : 'center',
+        top : -100
     },
     miniCardContainer: {
         display: "flex",
@@ -167,9 +240,10 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     menuBox: {
-        backgroundColor: '#DCDCDC',
-        width: 100,
-        height: 100,
+        borderRadius : 24,
+        backgroundColor: '#f5f5f5',
+        width: 80,
+        height: 80,
         alignItems: 'center',
         justifyContent: 'center',
         margin: 12,
@@ -182,8 +256,7 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     icon: {
-        width: 60,
-        height: 60,
+        elevation : 6
     },
     info: {
         fontSize: 14,
@@ -203,7 +276,28 @@ const styles = StyleSheet.create({
         elevation: 4,
         borderColor: '#DCDCDC',
         borderWidth: 1,
+    },
+    profilePhoto: {
+        height: 36,
+        width: 36,
+        borderRadius: 36,
+        backgroundColor: '#F3F4F6', // Equivalent à text-gray-100
+    },
+    rightContainer: {
+        flex: 1,
+        paddingRight: 16,
+        alignItems: 'flex-end',
+        paddingVertical: 8,
+    },
+    logoViewStyle: {
+        display : "flex",
+        flexDirection: 'row',
+        marginHorizontal : 16,
+        width: 150,
+        height : 150,
+        marginTop : 100,
+        justifyContent : 'center',
     }
-
 })
+
 

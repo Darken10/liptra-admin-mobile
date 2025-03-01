@@ -1,5 +1,5 @@
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native'
-import {useRouter} from "expo-router";
+import {ActivityIndicator, Image, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native'
+import {router, useRouter} from "expo-router";
 import {useTicketStore} from "@/src/hooks/useTicketStore";
 import Colors from '@/src/constants/Colors';
 import Bagde from "@/src/components/my-components/Bagde";
@@ -7,11 +7,17 @@ import Button from "@/src/components/my-components/Button";
 import React, {useState} from "react";
 import {useMutation} from "@tanstack/react-query";
 import {validerTicket} from "@/src/services/TicketService";
-import BackButton from "@/src/components/my-components/BackButton";
-
+import ErrorComponent from "@/src/components/my-components/ErrorComponent";
+import PageHeader from "@/src/components/my-components/Header";
+import {MaterialIcons} from "@expo/vector-icons";
+import DropdownMenu from "@/src/components/my-components/DropdownMenu";
+import {StatutTicketEnum} from "@/src/models/Enums";
+import Toast from "react-native-toast-message";
 
 
 export default function Modal() {
+
+    const statusBarHeight = StatusBar.currentHeight ?? 50
     const router = useRouter()
     const ticket = useTicketStore((state)=>state.ticket)
     const [error, setError] = useState('')
@@ -25,7 +31,13 @@ export default function Modal() {
                     setError(data.message.error ?? "")
                 } else {
                     if (data.ticket){
+                        console.log("Ticket bien Valider")
                         console.log(data.message.success)
+                        Toast.show({
+                            type :"success",
+                            text1 : "Ticket Valider",
+                            text2 : "le Ticket de " + data.ticket.user.name+ " a ete bien Valider",
+                        })
                         router.back()
                     }
                 }
@@ -40,7 +52,7 @@ export default function Modal() {
         if (ticket?.id && ticket?.code_qr && ticket?.numero_ticket){
             mutation.mutate({
                 ticket_id : ticket?.id,
-                ticket_qr_code : ticket?.code_qr,
+                ticket_code_qr : ticket?.code_qr,
                 numero_ticket : ticket?.numero_ticket ,
             })
         }
@@ -48,8 +60,8 @@ export default function Modal() {
 
 
     return (
-        <View style={styles.body}>
-            <BackButton />
+        <SafeAreaView style={{flex : 1,marginTop : statusBarHeight}}>
+            <Header />
             <View style={styles.header}>
                 <View style={styles.headerContent}>
                     <Image
@@ -61,74 +73,127 @@ export default function Modal() {
                 </View>
 
             </View>
-            <View style={styles.line}></View>
+            <View style={styles.body}>
+                {error && <ErrorComponent message={error}></ErrorComponent>}
 
-            <View>
+                <View style={styles.line}></View>
+
                 <View>
-                    <Text style={styles.compagnieSigle}>{ticket?.voyage.compagnie.sigle}</Text>
-                    <Text style={styles.compagnieName}>{ticket?.voyage.compagnie.name}</Text>
-                </View>
-                <View style={styles.voyageView}>
-                    <View style={styles.voyageVilleView}>
-                        <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.depart?.name}</Text>
-                        <Text style={styles.GareDepartName}>{ticket?.voyage.gare_depart.name}</Text>
+                    <View>
+                        <Text style={styles.compagnieSigle}>{ticket?.voyage.compagnie.sigle}</Text>
+                        <Text style={styles.compagnieName}>{ticket?.voyage.compagnie.name}</Text>
                     </View>
-                    <View style={styles.flechIconView}>
-                        <Text style={styles.flechIcon}>--{'>'}</Text>
+                    <View style={styles.voyageView}>
+                        <View style={styles.voyageVilleView}>
+                            <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.depart?.name}</Text>
+                            <Text style={styles.GareDepartName}>{ticket?.voyage.gare_depart.name}</Text>
+                        </View>
+                        <View style={styles.flechIconView}>
+                            <Text style={styles.flechIcon}>--{'>'}</Text>
+                        </View>
+                        <View style={styles.voyageVilleView}>
+                            <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.arriver?.name}</Text>
+                            <Text style={styles.GareDepartName}>{ticket?.voyage.gare_arrive.name}</Text>
+                        </View>
                     </View>
-                    <View style={styles.voyageVilleView}>
-                        <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.arriver?.name}</Text>
-                        <Text style={styles.GareDepartName}>{ticket?.voyage.gare_arrive.name}</Text>
+                </View>
+
+                <View style={styles.voyageDateView}>
+                    <View style={styles.voyageDateSousView}>
+                        <Text style={styles.voyageDate} >Date  : {ticket?.date}</Text>
+                        <Text style={styles.voyageDate} >Heure :  {ticket?.voyage.heure}</Text>
+                        <Text style={styles.voyageDate} >Classe :  {"Classe VIP"}</Text>
+                        <Text style={styles.voyageDate} >Prix :  {(ticket?.payements?.length && ticket?.payements?.length>0 ) ? ticket?.payements[ticket?.payements?.length-1]?.montant.toString() + " XOF" : "Gratuit"}</Text>
+                       <View style={styles.badgeView}>
+                           <StatusTicket status={ticket?.statut} ></StatusTicket>
+                       </View>
                     </View>
                 </View>
-            </View>
 
-            <View style={styles.voyageDateView}>
-                <View style={styles.voyageDateSousView}>
-                    <Text style={styles.voyageDate} >Date  : {ticket?.date}</Text>
-                    <Text style={styles.voyageDate} >Heure :  {ticket?.voyage.heure}</Text>
-                    <Text style={styles.voyageDate} >Classe :  {"Classe VIP"}</Text>
-                    <Text style={styles.voyageDate} >Prix :  {(ticket?.payements?.length && ticket?.payements?.length>0 ) ? ticket?.payements[ticket?.payements?.length-1]?.montant.toString() + " XOF" : "Gratuit"}</Text>
-                   <View style={styles.badgeView}>
-                       <StatusTicket status={'Payer'} ></StatusTicket>
-                   </View>
-                </View>
-            </View>
-
-            <View style={styles.viewBtn} >
-                <View>
-                    <Button mode={'outlined'} onPress={() => router.back()}>Retour</Button>
-                </View>
-                <View>
-
-                    <Button mode={'contained'} onPress={onHandleValide} >
+                <View style={styles.viewBtn} >
+                    <View>
+                        <Button mode={'outlined'} onPress={() => router.back()}>Retour</Button>
+                    </View>
+                    <View>
                         {
-                            mutation.isPending ?
-                                <>
-                                    <ActivityIndicator color={'white'} style={{paddingRight : 16, alignItems:"center"}} ></ActivityIndicator>
-                                    <Text >Loading</Text>
-                                </> :
-                                <>
-                                    <Text >Valider</Text>
-                                </>
+                            ticket?.statut === StatutTicketEnum.Payer
+                                ? <Button mode={'contained'} onPress={onHandleValide} disabled={mutation.isPending} >
+                                    {
+                                        mutation.isPending ?
+                                            <>
+                                                <ActivityIndicator color={'white'} style={{paddingRight : 16, alignItems:"center"}} ></ActivityIndicator>
+                                                <Text >Loading</Text>
+                                            </> :
+                                            <>
+                                                <Text >Valider</Text>
+                                            </>
+                                    }
+                                </Button>
+                                : null
                         }
-
-                    </Button>
+                    </View>
                 </View>
             </View>
+        </SafeAreaView>
+    )
+}
 
-        </View>
+
+function Header() {
+    const menuItems = [{
+            title : "Profile",
+            onPress: () => {console.log("menuItems clicked profile");}
+        },{
+            title : "Parametre",
+            onPress: () => {}
+        },
+
+        ]
+    return (
+        <PageHeader
+            leftNode={router.canGoBack() ? <MaterialIcons name="arrow-back" size={26} color={"#e3e3e3"}/> : null}
+            headerText="Liptra"
+            rightContainerStyle={styles.rightContainer}
+            handleOnPressLeftNode={router.back}
+            rightNode={
+            <View style={{display : "flex", flexDirection : 'row',alignItems : 'center',justifyContent : "center"}}>
+                <Image
+                    style={styles.profilePhoto}
+                    source={require("@/assets/images/user.png")}
+                />
+                <DropdownMenu options={menuItems} />
+            </View>
+            }
+        />
     )
 }
 
 
 type StatutProps = {
-    status : string
+    status : StatutTicketEnum | undefined
 }
 
 function StatusTicket({status} : StatutProps){
-    if (status=="Payer") {
-        return <Bagde type={'green'} message={"Payer"}/>
+    switch (status) {
+        case StatutTicketEnum.Payer:
+            return <Bagde type={'green'} message={StatutTicketEnum.Payer}/>
+
+        case StatutTicketEnum.Suspendre  :
+            return <Bagde type={'red'} message={StatutTicketEnum.Suspendre}/>
+        case  StatutTicketEnum.Bloquer  :
+            return <Bagde type={'red'} message={StatutTicketEnum.Bloquer }/>
+        case  StatutTicketEnum.Annuler :
+            return <Bagde type={'red'} message={StatutTicketEnum.Annuler}/>
+        case  StatutTicketEnum.Refuser :
+            return <Bagde type={'red'} message={StatutTicketEnum.Refuser}/>
+
+        case StatutTicketEnum.Valider:
+            return <Bagde type={'yellow'} message={StatutTicketEnum.Valider}/>
+
+        case StatutTicketEnum.EnAttente:
+            return <Bagde type={'purple'} message={StatutTicketEnum.EnAttente}/>
+        case StatutTicketEnum.Pause:
+            return <Bagde type={'purple'} message={StatutTicketEnum.Pause}/>
     }
 }
 
@@ -226,6 +291,18 @@ const styles = StyleSheet.create({
         gap : 8,
         justifyContent : "space-between",
         marginHorizontal: 20
+    },
+    profilePhoto: {
+        height: 36,
+        width: 36,
+        borderRadius: 36,
+        backgroundColor: '#F3F4F6', // Equivalent à text-gray-100
+    },
+    rightContainer: {
+        flex: 1,
+        paddingRight: 16,
+        alignItems: 'flex-end',
+        paddingVertical: 8,
     },
 })
 

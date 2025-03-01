@@ -1,16 +1,19 @@
 import axios from 'axios';
-import {BASE_URL} from "@/src/constants/Constants";
+import {BASE_URL, TOKEN_KEY} from "@/src/constants/Constants";
 import {useAuth} from "@/src/context/AuthContext";
+import {getItem} from "expo-secure-store";
 
 const api = axios.create({
     baseURL: BASE_URL+'/api',
 });
 
 api.interceptors.request.use(async (config) => {
-    const { userToken } = useAuth();
+    const userToken  = getItem(TOKEN_KEY);
     if (userToken) {
         config.headers.Authorization = `Bearer ${userToken}`;
+        config.headers.setContentType("application/json");
     }
+    console.log(config.baseURL)
     return config;
 });
 

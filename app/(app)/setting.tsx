@@ -3,7 +3,7 @@ import {
     Button,
     Image,
     SafeAreaView,
-    ScrollView,
+    ScrollView, StatusBar,
     StyleSheet,
     Switch,
     Text,
@@ -14,9 +14,11 @@ import React, {useMemo, useState} from 'react'
 import {useAuth} from "@/src/context/AuthContext";
 import {router} from "expo-router";
 import {MaterialIcons} from "@expo/vector-icons";
+import PageHeader from "@/src/components/my-components/Header";
 
 
 export default function Setting() {
+    const statusBarHeight = StatusBar.currentHeight
     const ProfileSection = [
         {
             header: "Preferences",
@@ -93,11 +95,10 @@ export default function Setting() {
   },[value]);
 
 
-
-
   return (
-      <SafeAreaView style={{flex: 1,backgroundColor:'#f6f6f6'}}>
+      <SafeAreaView style={{flex: 1,backgroundColor:'#f6f6f6',marginTop : statusBarHeight ?? 50}}>
         <ScrollView contentContainerStyle={styles.container}>
+          <Header></Header>
            {/* <View style={styles.header}>
                 <Text style={styles.title}>Setting</Text>
                 <Text style={styles.subTitle}>lorem ip sum dolor lorem ip sum dolor lorem ip sum dolor lorem ip sum dolor</Text>
@@ -165,9 +166,32 @@ export default function Setting() {
       </SafeAreaView>
   );
 }
+
+
+
+function Header() {
+
+    return (
+        <PageHeader
+            leftNode={router.canGoBack() ? <MaterialIcons name="arrow-back" size={26} color={"#e3e3e3"} /> : null}
+            headerText="Liptra"
+            rightContainerStyle={styles.rightContainer}
+            handleOnPressLeftNode={router.back}
+            rightNode={
+                <Image
+                    style={styles.profilePhoto}
+                    source={require("@/assets/images/user.png")}
+                />
+            }
+        />
+    )
+}
+
+
+
 const styles = StyleSheet.create({
     container: {
-        paddingVertical : 24
+        paddingBottom : 24
     },
     header : {
         paddingHorizontal : 24,
@@ -284,7 +308,18 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color : "#7F7F7F",
         marginRight : 4
-    }
-
+    },
+    profilePhoto: {
+        height: 36,
+        width: 36,
+        borderRadius: 36,
+        backgroundColor: '#F3F4F6', // Equivalent à text-gray-100
+    },
+    rightContainer: {
+        flex: 1,
+        paddingRight: 16,
+        alignItems: 'flex-end',
+        paddingVertical: 8,
+    },
 })
 

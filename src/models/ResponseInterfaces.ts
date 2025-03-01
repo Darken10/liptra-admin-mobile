@@ -1,3 +1,5 @@
+import {JoursSemainEnum, StatutTicketEnum} from "@/src/models/Enums";
+
 export interface IRole {
     id: number;
     name: string;
@@ -104,9 +106,8 @@ export interface ITrajet {
     etat?: any;
     created_at: string;
     updated_at: string;
-    // TODO :  A mettre dans le back
-    depart? : IVille;
-    arriver? : IVille;
+    depart : IVille;
+    arriver : IVille;
 }
 
 export interface ICompagnie {
@@ -130,7 +131,7 @@ export interface IVoyage {
     prix_aller_retour: number;
     is_quotidient: number;
     temps: string;
-    days: string[];
+    days: JoursSemainEnum[];
     trajet_id: number;
     user_id: number;
     compagnie_id: number;
@@ -157,7 +158,7 @@ export interface ITicket {
     bagages_data?: any;
     date: string;
     type: string;
-    statut: string;
+    statut: StatutTicketEnum;
     numero_ticket: string;
     numero_chaise: number;
     code_sms: string;

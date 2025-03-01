@@ -20,7 +20,7 @@ export type TicketInformtionType = {
 export type ValiderTicketCredentialType = {
   ticket_id: number,
   numero_ticket: string,
-  ticket_qr_code: string,
+  ticket_code_qr: string,
 }
 
 export type ValiderTicketType = {

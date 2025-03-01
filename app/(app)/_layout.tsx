@@ -11,6 +11,7 @@ import Colors from '@/src/constants/Colors'
 import { useAuth } from '@/src/context/AuthContext';
 import {useEffect} from "react";
 import {MaterialIcons} from "@expo/vector-icons";
+import ListPassagerTicketValider from "@/app/(app)/ListPassagerTicketValider";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -58,7 +59,7 @@ export default function RootLayout() {
               <Tabs
                   screenOptions={{
                       tabBarActiveTintColor: Colors[colorScheme ?? 'light'].primary,
-                      /* headerShown: false,*/
+                       headerShown: false,
                   }}>
                   <Tabs.Screen name="index"
                                options={{
@@ -90,6 +91,20 @@ export default function RootLayout() {
                                    },
                                }}
                   />
+                  <Tabs.Screen name="historique"
+                               options={{
+                                   title: 'Historique',
+                                   tabBarIcon : ()=> <MaterialIcons name="history" size={24} />,
+                                   headerLeft : ()=> {
+                                       return (
+                                           router.canGoBack() && (
+                                               <TouchableOpacity onPress={() => router.back()}>
+                                                   <MaterialIcons name="arrow-back" size={24} />
+                                               </TouchableOpacity>
+                                           )
+                                       )
+                                   },
+                               }} />
                   <Tabs.Screen name="setting"
                                options={{
                                    title: 'Setting',
@@ -105,21 +120,7 @@ export default function RootLayout() {
                                    },
                                }}
                   />
-                  <Tabs.Screen name="about"
-                               options={{
-                                   title: 'about',
-                                   tabBarIcon : ()=> <MaterialIcons name="verified-user" size={24} />,
-                                   headerLeft : ()=> {
-                                       return (
-                                           router.canGoBack() && (
-                                               <TouchableOpacity onPress={() => router.back()}>
-                                                   <MaterialIcons name="arrow-back" size={24} />
-                                               </TouchableOpacity>
-                                           )
-                                       )
-                                   },
-                               }}
-                  />
+
               </Tabs>
           </ProtectedRoute>
 

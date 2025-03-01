@@ -11,6 +11,9 @@ import Colors from '@/src/constants/Colors'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {AuthProvider, useAuth} from "@/src/context/AuthContext";
 import {useEffect} from "react";
+import { Provider } from 'react-native-paper';
+import {ToastUI} from "react-native-toast-message/lib/src/ToastUI";
+import Toast from "react-native-toast-message";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -64,9 +67,12 @@ export default function RootLayout() {
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
-                <Stack screenOptions={{
-                    headerShown: false,
-                }} ></Stack>
+                <Provider>
+                    <Stack screenOptions={{
+                        headerShown: false,
+                    }} ></Stack>
+                    <Toast />
+                </Provider>
             </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>

@@ -11,7 +11,7 @@ const Colors = {
   light: {
     primary: '#1E88E5',       // Bleu vif pour le mode clair
     secondary: '#03DAC6',     // Couleur secondaire (vert clair)
-    background: '#FFFFFF',    // Fond clair (blanc)
+    background: '#e5e4e4',    // Fond clair (blanc)
     surface: '#F1F1F1',       // Surface (gris clair)
     textPrimary: '#000000',   // Couleur du texte principal (noir)
     textSecondary: '#5F6368', // Couleur du texte secondaire (gris foncé)

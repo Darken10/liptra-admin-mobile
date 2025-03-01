@@ -1,13 +1,13 @@
-import {SafeAreaView, StyleSheet, Text} from 'react-native'
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native'
 import React, {useState} from 'react'
 import {CameraView, useCameraPermissions} from "expo-camera";
 import {Overlay} from '@/src/components/my-components/Scanner/Overlay'
 import {useMutation} from "@tanstack/react-query";
-import {findTicketByNumeroAndCode, findTicketByQRCode} from "@/src/services/TicketService";
+import { findTicketByQRCode} from "@/src/services/TicketService";
 import {useRouter} from "expo-router";
 import {useTicketStore} from "@/src/hooks/useTicketStore";
-import {Toast} from "expo-router/build/views/Toast";
-
+import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
+import {MaterialIcons} from "@expo/vector-icons";
 
 
 export default function Scanner() {
@@ -23,7 +23,7 @@ export default function Scanner() {
         onSuccess : data  => {
             if (data){
                 if (!data.is_valide  || !data.is_exist ) {
-                    setError(data?.message?.error)
+                    setError(data?.message?.error ?? "")
                 } else {
                     if (data.ticket){
                         setTicketStore(data.ticket)
@@ -56,7 +56,10 @@ export default function Scanner() {
     }
 
     return(
-        <SafeAreaView style={StyleSheet.absoluteFillObject}>
+        <SafeAreaView style={[StyleSheet.absoluteFillObject,{marginTop : 50}]}>
+
+                <MaterialIcons onPress={router.back} name={"arrow-circle-left"} size={40} color={"white"} style={styles.backBtn}></MaterialIcons>
+
             <CameraView
                 style={StyleSheet.absoluteFillObject}
                 facing={'back'}
@@ -67,4 +70,13 @@ export default function Scanner() {
         </SafeAreaView>
     )
 }
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    backBtn: {
+        position: 'absolute',
+        marginLeft: 8,
+        marginTop : 8,
+        padding : 16,
+        zIndex : 2,
+
+    }
+})
