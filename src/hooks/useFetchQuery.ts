@@ -5,6 +5,7 @@ import {getItem} from "expo-secure-store";
 
 export default function useFetchQuery(path: string, method: string = "GET", credential: any = null): any {
     const userToken = getItem(TOKEN_KEY);
+    console.log(userToken);
     return useQuery({
         queryKey : [path],
         queryFn : async ()=>{

@@ -187,3 +187,34 @@ export interface LoginResponse {
   user: IUser;
 }
 
+export interface IUserMini {
+  id: number;
+  first_name: string;
+  last_name: string;
+  name: string;
+  sexe: string;
+  email: string;
+  numero: number;
+  numero_identifiant: string;
+  profile_photo_path?: any;
+  profile_photo_url: string;
+}
+
+export interface ITicketPassager {
+  id: number;
+  a_bagage: boolean;
+  date: string;
+  type: string;
+  statut: StatutTicketEnum;
+  numero_ticket: string;
+  numero_chaise: number;
+  is_my_ticket: number;
+  transferer_at?: any;
+  valider_at?: any;
+  transferer_a_user_id?: any;
+  user: IUserMini;
+  voyage_id: number;
+  autre_personne_id?: any;
+}
+
+

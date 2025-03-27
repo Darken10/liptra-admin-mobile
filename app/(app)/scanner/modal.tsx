@@ -105,7 +105,7 @@ export default function Modal() {
                         <Text style={styles.voyageDate} >Classe :  {"Classe VIP"}</Text>
                         <Text style={styles.voyageDate} >Prix :  {(ticket?.payements?.length && ticket?.payements?.length>0 ) ? ticket?.payements[ticket?.payements?.length-1]?.montant.toString() + " XOF" : "Gratuit"}</Text>
                        <View style={styles.badgeView}>
-                           <StatusTicket status={ticket?.statut} ></StatusTicket>
+                           <TicketStatutBadge status={ticket?.statut} ></TicketStatutBadge>
                        </View>
                     </View>
                 </View>
@@ -167,36 +167,6 @@ function Header() {
         />
     )
 }
-
-
-type StatutProps = {
-    status : StatutTicketEnum | undefined
-}
-
-function StatusTicket({status} : StatutProps){
-    switch (status) {
-        case StatutTicketEnum.Payer:
-            return <Bagde type={'green'} message={StatutTicketEnum.Payer}/>
-
-        case StatutTicketEnum.Suspendre  :
-            return <Bagde type={'red'} message={StatutTicketEnum.Suspendre}/>
-        case  StatutTicketEnum.Bloquer  :
-            return <Bagde type={'red'} message={StatutTicketEnum.Bloquer }/>
-        case  StatutTicketEnum.Annuler :
-            return <Bagde type={'red'} message={StatutTicketEnum.Annuler}/>
-        case  StatutTicketEnum.Refuser :
-            return <Bagde type={'red'} message={StatutTicketEnum.Refuser}/>
-
-        case StatutTicketEnum.Valider:
-            return <Bagde type={'yellow'} message={StatutTicketEnum.Valider}/>
-
-        case StatutTicketEnum.EnAttente:
-            return <Bagde type={'purple'} message={StatutTicketEnum.EnAttente}/>
-        case StatutTicketEnum.Pause:
-            return <Bagde type={'purple'} message={StatutTicketEnum.Pause}/>
-    }
-}
-
 
 
 const styles = StyleSheet.create({

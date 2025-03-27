@@ -10,8 +10,9 @@ type VoyageListProps = {
     voyage : IVoyage
 }
 export default function VoyageListItem({voyage}: VoyageListProps) {
+    const urlFormatedDate = getNextClosestDate(voyage.days).getDate()+'-'+(getNextClosestDate(voyage.days).getMonth()+1)+'-'+getNextClosestDate(voyage.days).getFullYear()
     return (
-        <TouchableOpacity style={styles.container} onPress={()=>router.push("/(modals)/voyages/"+voyage.id)}>
+        <TouchableOpacity style={styles.container} onPress={()=>router.push("/(modals)/voyages/"+voyage.id+"/"+urlFormatedDate)}>
            <View style={styles.globaleView}>
                <View style={styles.villesView}>
                    <Text style={styles.villeNameText}>{voyage.trajet.depart.name ?? ""} </Text>
