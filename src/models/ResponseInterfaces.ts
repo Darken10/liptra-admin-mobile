@@ -175,8 +175,9 @@ export interface ITicket {
     valider_at?: any;
     transferer_a_user_id?: any;
     user: IUser;
-    payements: IPayements[];
-    voyage: IVoyage;
+    payements?: IPayements[];
+    voyage?: IVoyage;
+    voyage_instance: Voyage_instance;
 }
 
 
@@ -213,8 +214,69 @@ export interface ITicketPassager {
   valider_at?: any;
   transferer_a_user_id?: any;
   user: IUserMini;
-  voyage_id: number;
+  voyage_id?: number;
   autre_personne_id?: any;
+  voyageInstance ?:any;
+}
+
+export interface Voyage_instance {
+  care_id?: any;
+  chauffer_id?: any;
+  classe_id?: any;
+  created_at: string;
+  date: string;
+  deleted_at?: any;
+  heure: string;
+  id: string;
+  nb_place: number;
+  prix: number;
+  statut: string;
+  updated_at: string;
+  voyage_id: number;
 }
 
 
+
+
+export interface Voyage {
+  arrive_id: number;
+  classe_id: number;
+  compagnie: string[];
+  compagnie_id: number;
+  created_at: string;
+  days: string[];
+  depart_id: number;
+  gare_arrive: string[];
+  gare_depart: string[];
+  heure: string;
+  id: number;
+  is_quotidient: number;
+  nb_pace: number;
+  prix: number;
+  prix_aller_retour: number;
+  statut: string[];
+  statut_id: number;
+  temps: string;
+  trajet: string[];
+  trajet_id: number;
+  updated_at: string;
+  user: string[];
+  user_id: number;
+}
+
+export interface Voyage_instance {
+  care_id?: any;
+  chauffer_id?: any;
+  classe_id?: any;
+  created_at: string;
+  date: string;
+  deleted_at?: any;
+  heure: string;
+  id: string;
+  nb_place: number;
+  prix: number;
+  statut: string;
+  updated_at: string;
+  voyage: Voyage;
+  voyage_id: number;
+}

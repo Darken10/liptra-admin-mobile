@@ -13,6 +13,7 @@ import {MaterialIcons} from "@expo/vector-icons";
 import DropdownMenu from "@/src/components/my-components/DropdownMenu";
 import {StatutTicketEnum} from "@/src/models/Enums";
 import Toast from "react-native-toast-message";
+import {TicketStatutBadge} from "@/src/components/my-components/TicketStatutBadge";
 
 
 export default function Modal() {
@@ -21,7 +22,7 @@ export default function Modal() {
     const router = useRouter()
     const ticket = useTicketStore((state)=>state.ticket)
     const [error, setError] = useState('')
-    console.log(ticket?.voyage.trajet)
+
 
     const mutation = useMutation({
         mutationFn : validerTicket,
@@ -80,20 +81,20 @@ export default function Modal() {
 
                 <View>
                     <View>
-                        <Text style={styles.compagnieSigle}>{ticket?.voyage.compagnie.sigle}</Text>
-                        <Text style={styles.compagnieName}>{ticket?.voyage.compagnie.name}</Text>
+                        <Text style={styles.compagnieSigle}>{ticket?.voyage_instance.voyage.compagnie.sigle}</Text>
+                        <Text style={styles.compagnieName}>{ticket?.voyage_instance.voyage.compagnie.name}</Text>
                     </View>
                     <View style={styles.voyageView}>
                         <View style={styles.voyageVilleView}>
-                            <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.depart?.name}</Text>
-                            <Text style={styles.GareDepartName}>{ticket?.voyage.gare_depart.name}</Text>
+                            <Text style={styles.villeDepartName}>{ticket?.voyage_instance.voyage.trajet.depart?.name}</Text>
+                            <Text style={styles.GareDepartName}>{ticket?.voyage_instance.voyage.gare_depart.name}</Text>
                         </View>
                         <View style={styles.flechIconView}>
                             <Text style={styles.flechIcon}>--{'>'}</Text>
                         </View>
                         <View style={styles.voyageVilleView}>
-                            <Text style={styles.villeDepartName}>{ticket?.voyage.trajet.arriver?.name}</Text>
-                            <Text style={styles.GareDepartName}>{ticket?.voyage.gare_arrive.name}</Text>
+                            <Text style={styles.villeDepartName}>{ticket?.voyage_instance.voyage.trajet.arriver?.name}</Text>
+                            <Text style={styles.GareDepartName}>{ticket?.voyage_instance.voyage.gare_arrive.name}</Text>
                         </View>
                     </View>
                 </View>
@@ -101,7 +102,7 @@ export default function Modal() {
                 <View style={styles.voyageDateView}>
                     <View style={styles.voyageDateSousView}>
                         <Text style={styles.voyageDate} >Date  : {ticket?.date}</Text>
-                        <Text style={styles.voyageDate} >Heure :  {ticket?.voyage.heure}</Text>
+                        <Text style={styles.voyageDate} >Heure :  {ticket?.voyage_instance.heure}</Text>
                         <Text style={styles.voyageDate} >Classe :  {"Classe VIP"}</Text>
                         <Text style={styles.voyageDate} >Prix :  {(ticket?.payements?.length && ticket?.payements?.length>0 ) ? ticket?.payements[ticket?.payements?.length-1]?.montant.toString() + " XOF" : "Gratuit"}</Text>
                        <View style={styles.badgeView}>

@@ -1,5 +1,5 @@
 
-export const BASE_URL = "http://192.168.1.86:8000";
+export const BASE_URL = "https://test.liptra.net";
 
 export const TOKEN_KEY = 'userToken';
 
