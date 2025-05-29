@@ -70,6 +70,7 @@ export default function RootLayout() {
                 <Provider>
                     <Stack screenOptions={{
                         headerShown: false,
+                        statusBarStyle: 'light',
                     }} ></Stack>
                     <Toast />
                 </Provider>

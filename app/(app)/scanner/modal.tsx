@@ -61,7 +61,7 @@ export default function Modal() {
 
 
     return (
-        <SafeAreaView style={{flex : 1,marginTop : statusBarHeight}}>
+        <View style={{flex : 1,marginTop : statusBarHeight}}>
             <Header />
             <View style={styles.header}>
                 <View style={styles.headerContent}>
@@ -135,7 +135,7 @@ export default function Modal() {
                     </View>
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

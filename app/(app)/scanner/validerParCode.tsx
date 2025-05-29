@@ -74,7 +74,7 @@ export default function ValiderParCode() {
 
 
     return (
-        <SafeAreaView style={{flex : 1,marginTop : statusBarHeight}}>
+        <View style={{flex : 1}}>
             <Header />
             <ScrollView style={{ top : -100}}>
                 <View style={{display : "flex",flexDirection : "row",justifyContent : "center"}}>
@@ -133,7 +133,7 @@ export default function ValiderParCode() {
 
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 
 

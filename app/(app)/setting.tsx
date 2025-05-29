@@ -96,7 +96,7 @@ export default function Setting() {
 
 
   return (
-      <SafeAreaView style={{flex: 1,backgroundColor:'#f6f6f6',marginTop : statusBarHeight ?? 50}}>
+      <SafeAreaView style={{flex: 1,backgroundColor:'#f6f6f6'}}>
         <ScrollView contentContainerStyle={styles.container}>
           <Header></Header>
            {/* <View style={styles.header}>

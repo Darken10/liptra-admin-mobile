@@ -1,4 +1,4 @@
-import {FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native'
+import {ActivityIndicator, FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native'
 import React, {useState} from 'react'
 import VoyageListItem from "@/src/components/my-components/VoyageListItem";
 import {IVoyage} from "@/src/models/ResponseInterfaces";
@@ -9,15 +9,34 @@ import {router} from "expo-router";
 import DropdownMenu from "@/src/components/my-components/DropdownMenu";
 import useFetchQuery from "@/src/hooks/useFetchQuery";
 import {MaterialIcons} from "@expo/vector-icons";
+import {useQuery} from "@tanstack/react-query";
+import {VoyageServices} from "@/src/services/VoyageServices";
+import {GetAvalableVoyage, VoyageListTypes} from "@/src/models/Voyages";
 
 export default function Index() {
 
-    const statusBarHeight = StatusBar.currentHeight
-    const {data} = useFetchQuery("/compagnie/voyages")
-    const  voyages :IVoyage[] =data ?? []
-    console.log(data)
+    const {data,isLoading,error} = useQuery({
+        queryKey:['/voyages/today'],
+        queryFn:VoyageServices.getAvailableVoyages
+    })
+    console.log("voyages 222: ", data?.data);
+    const  voyages : VoyageListTypes[] =data?.data ?? []
+
+    if (isLoading) {
+        return <ActivityIndicator/>
+    }
+
+    if (error) {
+        return <View>
+            <View>
+                <Text>Error  : {error.message}</Text>
+            </View>
+        </View>;
+    }
+
+
     return (
-        <SafeAreaView style={[styles.container,{marginTop : statusBarHeight ?? 50,backgroundColor : Colors.light.background}]}>
+        <SafeAreaView style={[styles.container,{backgroundColor : Colors.light.background}]}>
             <Header />
            <View style={styles.container}>
                {
@@ -26,12 +45,10 @@ export default function Index() {
                                    renderItem={({item}) => (
                                        <VoyageListItem voyage={item} />
                                    )}
-
                        />
                        : <Empty></Empty>
                }
            </View>
-
         </SafeAreaView>
     )
 }

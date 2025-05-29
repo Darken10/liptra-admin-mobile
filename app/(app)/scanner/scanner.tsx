@@ -56,7 +56,7 @@ export default function Scanner() {
     }
 
     return(
-        <SafeAreaView style={[StyleSheet.absoluteFillObject,{marginTop : 50}]}>
+        <SafeAreaView style={[StyleSheet.absoluteFillObject,]}>
 
                 <MaterialIcons onPress={router.back} name={"arrow-circle-left"} size={40} color={"white"} style={styles.backBtn}></MaterialIcons>
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backBtn: {
         position: 'absolute',
         marginLeft: 8,
-        marginTop : 8,
+        marginTop : 48,
         padding : 16,
         zIndex : 2,
 

@@ -59,8 +59,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#E5E7EB', // Equivalent à border-gray-200
         paddingVertical: 10,
+        paddingTop : 50,
         zIndex : 3,
         backgroundColor : "#1616d9"
+
     } as ViewStyle,
     leftItem: {
         flex: 1,

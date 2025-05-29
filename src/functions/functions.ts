@@ -31,4 +31,13 @@ export function date(date: string): Date  {
     return new Date(date);
 }
 
+export function formateHoure(date: string): string {
+    const jour = new Date(date);
+    return jour.toLocaleTimeString("fr-FR");
+}
+
+export function formateDate(date: string): string {
+    const jour = new Date(date);
+    return jour.toLocaleDateString("fr-FR");
+}
 

@@ -8,7 +8,7 @@ export default function ScannerIndex() {
 
     const statusBarHeight = StatusBar.currentHeight
     return (
-        <SafeAreaView style={{flex : 1,marginTop : statusBarHeight ?? 50}}>
+        <SafeAreaView style={{flex : 1}}>
             <Header />
             <View style={styles.cardLinksView}>
                 <View style={styles.cardLinkView}>

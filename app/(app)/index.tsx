@@ -80,7 +80,7 @@ export default function Index() {
 
 
   return (
-      <SafeAreaView style={{flex : 1,marginTop : statusBarHeight ?? 50}}>
+      <View style={{flex : 1}}>
             <Header />
           <TouchableOpacity onPress={()=>{router.push('/scanner/scanner')}} style={styles.flotingBtn}>
               <MaterialIcons name={"qr-code-scanner"} size={24} color={"#FFF"}></MaterialIcons>
@@ -112,7 +112,7 @@ export default function Index() {
                   </View>
               </View>
           </View>
-      </SafeAreaView>
+      </View>
 
   );
 }

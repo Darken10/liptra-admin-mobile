@@ -8,4 +8,9 @@ export default function Historique() {
         </View>
     )
 }
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginHorizontal: 15,
+    }
+})
