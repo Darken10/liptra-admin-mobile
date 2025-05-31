@@ -21,76 +21,46 @@ export default function Passages() {
         queryKey : ['voyage_instance',id,'passagers'],
         queryFn : ()=>VoyageServices.getPassagesVoyage(id)
     })
-    const tickets : TicketUltraMini[] = data ?? []
+    const tickets : TicketUltraMini[] = data?.data ?? []
+    console.log("Passage : "+data?.data.length)
 
     if(isLoading){
         return (
-            <ActivityIndicator />
+            <ActivityIndicator style={{marginTop : 100}} size={"large"} />
         );
     }
 
     if(error){
-        return <View>ERROR : {error.message}</View>;
+        return <View style={{marginTop : 100}}>
+            ERROR : {error.message}
+        </View>;
     }
 
     return (
-        <View>
-            <Header />
-            <View style={styles.container}>
+        <View style={styles.container}>
+
                 <FlatList
                     data={tickets}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <TicketCard ticket={item} />}
-                    contentContainerStyle={tickets.length === 0 ? styles.emptyContainer : undefined}
                     ListEmptyComponent={() => (
-                        <View style={styles.emptyBox}>
+                        <View >
                             <Ionicons name="ticket-outline" size={64} color="#ccc" />
-                            <Text style={styles.emptyText}>Aucun ticket trouvé</Text>
+                            <Text >Aucun ticket trouvé</Text>
                         </View>
                     )}
                 />
-            </View>
         </View>
     )
 }
 
 
-function Header() {
-    const menuItems = [{
-        title : "Profile",
-        onPress: () => {console.log("menuItems clicked profile");}
-    },{
-        title : "Parametre",
-        onPress: () => {}
-    },
-
-    ]
-    return (
-        <PageHeader
-            /*leftNode={router.canGoBack() ? <MaterialIcons name="arrow-back" size={26}  color={"#e3e3e3"}/> : null}*/
-            headerText="Liptra"
-            rightContainerStyle={styles.rightContainer}
-            handleOnPressLeftNode={router.back}
-            leftNode={router.canGoBack() ? <MaterialIcons name="arrow-back" size={26} color={"#e3e3e3"}/> : null}
-            rightNode={
-                <View style={{display : "flex", flexDirection : 'row',alignItems : 'center',justifyContent : "center"}}>
-                    <Image
-                        style={styles.profilePhoto}
-                        source={require("@/assets/images/user.png")}
-                    />
-                    <DropdownMenu options={menuItems} />
-                </View>
-            }
-        />
-    )
-}
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
-    },
+    },/*
     emptyView : {
         flex: 1,
         justifyContent: 'center',
@@ -116,4 +86,18 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         paddingVertical: 8,
     },
+    emptyContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    emptyBox: {
+        alignItems: 'center',
+    },
+    emptyText: {
+        marginTop: 12,
+        fontSize: 16,
+        color: '#888',
+    },*/
 });

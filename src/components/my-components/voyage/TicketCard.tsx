@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TicketUltraMini} from "@/src/models/Ticket";
 import {StatutTicketEnum} from "@/src/models/Enums";
 import {router} from "expo-router";
+import {formateDate, formateHoure} from "@/src/functions/functions";
 
 
 interface Props {
@@ -14,14 +15,12 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
     const getStatusStyle = (statut: string) => {
         switch (statut) {
             case StatutTicketEnum.Payer:
-                return { label: 'Payé', backgroundColor: '#FFC107' }; // Jaune
+                return { label: 'Payé', backgroundColor: '#4CAF50' };
             case StatutTicketEnum.Pause:
                 return { label: 'En pause', backgroundColor: '#2196F3' }; // Bleu
             case StatutTicketEnum.Valider:
-                return { label: 'Utilisé', backgroundColor: '#4CAF50' }; // Vert
+                return { label: 'Utilisé', backgroundColor: '#FFC107' };
             case StatutTicketEnum.Bloquer :
-            case StatutTicketEnum.Refuser :
-            case StatutTicketEnum.Annuler :
                 return { label: 'Bloqué', backgroundColor: '#F44336' }; // Rouge
             default:
                 return { label: 'Inconnu', backgroundColor: '#9E9E9E' }; // Gris
@@ -30,7 +29,11 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
 
     const status = getStatusStyle(ticket.statut);
 
+    const getToTicketDetail = ()=>{
+        router.push('/tickets/'+ticket.id)
+    }
 
+    console.log("status", status);
     return (
         <View style={styles.card}>
             <Text style={styles.title}>🎟️ Ticket #{ticket.numero_ticket}</Text>
@@ -48,13 +51,8 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             </View>
 
             <View style={styles.row}>
-                <Text style={styles.label}>Compagnie :</Text>
-                <Text style={styles.value}>{ticket.voyage.compagnie}</Text>
-            </View>
-
-            <View style={styles.row}>
                 <Text style={styles.label}>Date & Heure :</Text>
-                <Text style={styles.value}>{ticket.voyage.date} à {ticket.voyage.heure}</Text>
+                <Text style={styles.value}>{formateDate(ticket.voyage.date)} à {formateHoure(ticket.voyage.heure)}</Text>
             </View>
 
             <View style={styles.row}>
@@ -67,8 +65,15 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
                 <Text style={styles.value}>{ticket.voyage.prix} FCFA</Text>
             </View>
 
-            <View style={[styles.statusContainer, { backgroundColor: status.backgroundColor }]}>
-                <Text style={styles.statusText}>{status.label.toUpperCase()}</Text>
+            <View style={{flex: 1,flexDirection:'row', justifyContent:'space-between',gap:16}}>
+                <View style={[styles.statusContainer, { backgroundColor: status.backgroundColor }]}>
+                    <Text style={styles.statusText}>{status.label.toUpperCase()}</Text>
+                </View>
+                <TouchableOpacity onPress={getToTicketDetail}>
+                    <View style={{marginHorizontal:20,paddingHorizontal:30,paddingVertical:10,backgroundColor:"#0345eb",borderRadius:16}}>
+                        <Text style={styles.statusText}>Voir</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -78,7 +83,7 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
         marginHorizontal: 16,
-        marginVertical: 8,
+        marginVertical: 100,
         borderRadius: 16,
         padding: 16,
         shadowColor: '#000',
@@ -86,6 +91,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.15,
         shadowRadius: 4,
         elevation: 3,
+        color : '#000'
     },
     title: {
         fontSize: 18,

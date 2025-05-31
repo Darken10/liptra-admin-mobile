@@ -7,6 +7,7 @@ import {
 } from "@/src/models/types";
 import api from "@/src/services/apiClient";
 import {getItem} from "expo-secure-store";
+import {TicketDetail} from "@/src/models/Ticket";
 
 
 export const findTicketByNumeroAndCode = async (credentiale: NumeroAndCodeType | undefined) => {
@@ -75,5 +76,21 @@ export const validerTicket = async (credentiale: ValiderTicketCredentialType | u
         throw new Error("Une erreur est survenue lors post de code et numero: "+response.status + ' '+ response.statusText);
     }
     return await response.json() as ValiderTicketType ;
+
+
 }
 
+
+export const TicketServices = {
+    getTicketByNumeroAndCode : (numero:string,code:string)=>{
+
+    },
+    getTicketByQRCode : (qrcode:string)=>{
+
+    },
+    getTicketId : (id:string)=>{
+        const req = api.get<TicketDetail>(`/tickets/${id}`)
+        return req
+    }
+
+}

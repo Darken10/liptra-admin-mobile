@@ -17,4 +17,6 @@ export const VoyageServices = {
         const req = api.get<TicketUltraMini[]>("/voyages/"+id+"/tickets")
         return req
     }
+
+
 }

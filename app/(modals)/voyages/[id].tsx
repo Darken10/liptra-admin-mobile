@@ -95,16 +95,20 @@ export default function ShowVoyage() {
 
                     <View style={styles.section}>
                         <Text style={styles.heading}>Conforts</Text>
-                        <FlatList
-                            data={voyage.voyage.classe.conforts}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.confortItem}>
-                                    <Text style={styles.confortTitle}>• {item.name || 'Confort'}</Text>
-                                    <Text style={styles.confortDesc}>{item.description}</Text>
-                                </View>
-                            )}
-                        />
+                        {
+                            voyage.voyage.classe.conforts.length > 0 ?
+                                voyage.voyage.classe.conforts.map((item)=>(
+                                    <View style={styles.confortItem} key={item.id}>
+                                        <Text style={styles.confortTitle}>• {item.name || 'Confort'}</Text>
+                                        <Text style={styles.confortDesc}>{item.description}</Text>
+                                    </View>
+                                )) :
+                                (
+                                    <View style={styles.confortItem}>
+                                        Non Définie
+                                    </View>
+                                )
+                        }
                     </View>
 
                     <View style={styles.section}>
