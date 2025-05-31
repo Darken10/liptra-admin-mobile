@@ -26,3 +26,4 @@ export interface TicketUltraMini {
   validated_at?: Date;
   created_at: string;
 }
+

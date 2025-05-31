@@ -7,7 +7,8 @@ import {
     Image,
     ActivityIndicator,
     ScrollView,
-    FlatList
+    FlatList,
+    TouchableOpacity,
 } from 'react-native'
 import React from 'react'
 import {router, useLocalSearchParams} from "expo-router";
@@ -19,10 +20,12 @@ import {useQuery} from "@tanstack/react-query";
 import {VoyageServices} from "@/src/services/VoyageServices";
 import {VoyageDetail} from "@/src/models/VoyageDetail";
 
+
 export default function ShowVoyage() {
 
     const params = useLocalSearchParams()
     const id = params.id as string;
+
     const {data,isLoading,error} = useQuery({
         queryKey : ['voyage_instance',id],
         queryFn : ()=>VoyageServices.getVoyageById(id)
@@ -30,6 +33,10 @@ export default function ShowVoyage() {
 
     const voyage:VoyageDetail = data?.data
     console.log(voyage)
+
+    const gotoListPassage = ()=>{
+        return router.push("/voyages/"+voyage.id+"/passages")
+    }
 
     if(isLoading){
         return <ActivityIndicator/>
@@ -70,6 +77,15 @@ export default function ShowVoyage() {
                         <Text>Arrivée: {voyage.voyage.trajet.destination.ville} - {voyage.voyage.trajet.destination.gare}</Text>
                         <Text>Durée estimée: {new Date(voyage.voyage.trajet.duree).toLocaleTimeString()}</Text>
                     </View>
+
+                    <View style={styles.section}>
+                        <Text style={styles.heading}>Liste des passages</Text>
+                        <Text>Nombre: {voyage.voyage.compagnie.name}</Text>
+                        <TouchableOpacity onPress={gotoListPassage}>
+                            <Text>Liste des tickets </Text>
+                        </TouchableOpacity>
+                    </View>
+
 
                     <View style={styles.section}>
                         <Text style={styles.heading}>Compagnie</Text>

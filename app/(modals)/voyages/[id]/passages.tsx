@@ -1,66 +1,59 @@
-import {ActivityIndicator, FlatList, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native'
+import {View, Text, ActivityIndicator, FlatList,StyleSheet,Image} from 'react-native'
 import React from 'react'
-import VoyageListItem from "@/src/components/my-components/VoyageListItem";
-import {Bus} from "lucide-react-native";
-import Colors from "@/src/constants/Colors";
-import PageHeader from "@/src/components/my-components/Header";
-import {router} from "expo-router";
-import DropdownMenu from "@/src/components/my-components/DropdownMenu";
-import {MaterialIcons} from "@expo/vector-icons";
+import {useLocalSearchParams} from "expo-router";
 import {useQuery} from "@tanstack/react-query";
 import {VoyageServices} from "@/src/services/VoyageServices";
-import {VoyageListTypes} from "@/src/models/Voyages";
+import {TicketUltraMini} from "@/src/models/Ticket";
+import TicketCard from "@/src/components/my-components/voyage/TicketCard";
+import { Ionicons } from '@expo/vector-icons';
+import Colors from "@/src/constants/Colors";
+import {router} from "expo-router";
+import {MaterialIcons} from "@expo/vector-icons";
 
-export default function Index() {
+import DropdownMenu from "@/src/components/my-components/DropdownMenu";
 
+import PageHeader from "@/src/components/my-components/Header";
+
+export default function Passages() {
+    const params = useLocalSearchParams()
+    const id = params.id as string;
     const {data,isLoading,error} = useQuery({
-        queryKey:['/voyages/today'],
-        queryFn:VoyageServices.getAvailableVoyages
+        queryKey : ['voyage_instance',id,'passagers'],
+        queryFn : ()=>VoyageServices.getPassagesVoyage(id)
     })
-    console.log("voyages 222: ", data?.data);
-    const  voyages : VoyageListTypes[] =data?.data ?? []
+    const tickets : TicketUltraMini[] = data ?? []
 
-    if (isLoading) {
-        return <ActivityIndicator/>
+    if(isLoading){
+        return (
+            <ActivityIndicator />
+        );
     }
 
-    if (error) {
-        return <View>
-            <View>
-                <Text>Error  : {error.message}</Text>
-            </View>
-        </View>;
+    if(error){
+        return <View>ERROR : {error.message}</View>;
     }
-
 
     return (
-        <SafeAreaView style={[styles.container,{backgroundColor : Colors.light.background}]}>
+        <View>
             <Header />
-           <View style={styles.container}>
-               {
-                   voyages.length > 0
-                       ? <FlatList data={voyages} keyExtractor={(item) => item.id.toString()}
-                                   renderItem={({item}) => (
-                                       <VoyageListItem voyage={item} />
-                                   )}
-                       />
-                       : <Empty></Empty>
-               }
-           </View>
-        </SafeAreaView>
-    )
-}
-
-
-const Empty = () => {
-
-    return (
-        <View style={styles.emptyView}>
-            <Bus size={150} color={Colors.light.gray} />
-            <Text style={styles.emptyViewText}>PAS DE VOYAGE</Text>
+            <View style={styles.container}>
+                <FlatList
+                    data={tickets}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => <TicketCard ticket={item} />}
+                    contentContainerStyle={tickets.length === 0 ? styles.emptyContainer : undefined}
+                    ListEmptyComponent={() => (
+                        <View style={styles.emptyBox}>
+                            <Ionicons name="ticket-outline" size={64} color="#ccc" />
+                            <Text style={styles.emptyText}>Aucun ticket trouvé</Text>
+                        </View>
+                    )}
+                />
+            </View>
         </View>
     )
 }
+
 
 function Header() {
     const menuItems = [{
@@ -92,6 +85,7 @@ function Header() {
     )
 }
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -122,4 +116,4 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         paddingVertical: 8,
     },
-})
+});
