@@ -71,7 +71,11 @@ export default function RootLayout() {
                     <Stack screenOptions={{
                         headerShown: false,
                         statusBarStyle: 'light',
-                    }} ></Stack>
+                    }} >
+                        <Stack.Screen name={"voyages"} />
+                        <Stack.Screen name={"tickets"} />
+                        <Stack.Screen name={"tickets/[id]"} />
+                    </Stack>
                     <Toast />
                 </Provider>
             </AuthProvider>

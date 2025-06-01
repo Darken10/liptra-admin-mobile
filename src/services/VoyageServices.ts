@@ -1,7 +1,7 @@
 import api from "@/src/services/apiClient";
 import { VoyageListTypes} from "@/src/models/Voyages";
 import {VoyageDetail} from "@/src/models/VoyageDetail";
-import {TicketUltraMini} from "@/src/models/Ticket";
+import {TicketDetail, TicketUltraMini} from "@/src/models/Ticket";
 
 export const VoyageServices = {
     getAvailableVoyages (){
@@ -15,6 +15,11 @@ export const VoyageServices = {
 
     getPassagesVoyage (id:string){
         const req = api.get<TicketUltraMini[]>("/voyages/"+id+"/tickets")
+        return req
+    },
+    getTicketById  (id:string){
+        const req = api.get<TicketDetail>(`/tickets/`+id)
+        console.log("appel api ticket", req)
         return req
     }
 

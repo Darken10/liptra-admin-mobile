@@ -59,7 +59,6 @@ export const validerTicket = async (credentiale: ValiderTicketCredentialType | u
     if (!credentiale) {
         return
     }
-    console.log("Credentiale", credentiale)
     const userToken = getItem(TOKEN_KEY);
     const response = await fetch(`${BASE_URL}/api/ticket/valider`,{
         method: "POST",
@@ -70,8 +69,6 @@ export const validerTicket = async (credentiale: ValiderTicketCredentialType | u
         },
         body: JSON.stringify(credentiale)
     })
-    console.log("my token", userToken)
-    console.log(`${BASE_URL}/api/ticket/valider`)
     if (!response.ok) {
         throw new Error("Une erreur est survenue lors post de code et numero: "+response.status + ' '+ response.statusText);
     }
@@ -80,17 +77,12 @@ export const validerTicket = async (credentiale: ValiderTicketCredentialType | u
 
 }
 
-
-export const TicketServices = {
-    getTicketByNumeroAndCode : (numero:string,code:string)=>{
-
-    },
-    getTicketByQRCode : (qrcode:string)=>{
-
-    },
-    getTicketId : (id:string)=>{
+export const TicketService = {
+    getTicketById (id:string){
         const req = api.get<TicketDetail>(`/tickets/${id}`)
+        console.log("appel api ticket", req)
         return req
-    }
+    },
+
 
 }

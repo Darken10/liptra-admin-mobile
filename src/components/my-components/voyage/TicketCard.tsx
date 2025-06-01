@@ -30,7 +30,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
     const status = getStatusStyle(ticket.statut);
 
     const getToTicketDetail = ()=>{
-        router.push('/tickets/'+ticket.id)
+        router.push(`/tickets/${ticket.id}`)
     }
 
     console.log("status", status);
