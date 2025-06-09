@@ -72,9 +72,6 @@ export default function RootLayout() {
                         headerShown: false,
                         statusBarStyle: 'light',
                     }} >
-                        <Stack.Screen name={"voyages"} />
-                        <Stack.Screen name={"tickets"} />
-                        <Stack.Screen name={"tickets/[id]"} />
                     </Stack>
                     <Toast />
                 </Provider>
